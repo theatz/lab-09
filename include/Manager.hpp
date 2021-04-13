@@ -13,26 +13,31 @@
 #include <queue>
 #include <string>
 
+#include "Callback.hpp"
 #include "Downloader.hpp"
 #include "Parser.hpp"
 #include "Structs.hpp"
-#include "ThreadPool.hpp"
-#include "Callback.hpp"
 #include "Task.hpp"
+#include "Writer.hpp"
+#include "ThreadPool.hpp"
+
 
 class Manager {
  public:
-  Manager(std::size_t threadsMaxDownload, std::size_t threadsMaxParse,
-          std::size_t depth);
+  Manager(uint32_t& threadsMaxDownload, uint32_t& threadsMaxParse, uint32_t& depth);
 
+  template <typename callback_t>
+  void Start();
+  template <typename callback_t>
   void CallbackDownload(const PageToParse& page);
+  template <typename callback_t>
   void CallbackParse(const PageOutput& output);
 
  private:
   // manage threads count
-  std::size_t _threadsMaxDownload;
-  std::size_t _threadsMaxParse;
-  std::size_t _threadsMaxWrite;
+  uint32_t _threadsMaxDownload;
+  uint32_t _threadsMaxParse;
+  uint32_t _threadsMaxWrite;
 
   // manage threads
   //  ThreadPool
@@ -40,14 +45,15 @@ class Manager {
   ThreadPool _threadPoolParse;
   ThreadPool _threadPoolWrite;
 
-  std::mutex _mutexDownload;
-  std::mutex _mutexParse;
 
   // manage work
   bool _work;
-  std::size_t _depth;
+  uint32_t _depth;
   Downloader _downloader;
   Parser _parser;
+
+  std::mutex _mutexDownload;
+  std::mutex _mutexParse;
 };
 
 #endif  // PRODUCER_CONSUMER_MANAGER_HPP

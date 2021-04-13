@@ -33,8 +33,8 @@ project(producer-consumer)
 
 hunter_add_package(Beast)
 find_package(Beast CONFIG REQUIRED)
-hunter_add_package(Boost COMPONENTS  thread filesystem)
-find_package(Boost CONFIG REQUIRED thread filesystem)
+hunter_add_package(Boost COMPONENTS  thread filesystem program_options)
+find_package(Boost CONFIG REQUIRED thread filesystem program_options)
 find_package(Threads)
 hunter_add_package(GTest)
 find_package(GTest CONFIG REQUIRED)
@@ -50,6 +50,7 @@ add_library(${PROJECT_NAME} STATIC
         sources/Parser.cpp
         sources/Manager.cpp
         sources/ThreadPool.cpp
+        sources/Writer.cpp
         )
 
 
@@ -58,6 +59,7 @@ target_link_libraries(${PROJECT_NAME}
         Boost::filesystem
         Boost::thread
         GTest::gmock_main
+        Boost::program_options
         nlohmann_json::nlohmann_json
         gumbo
         )

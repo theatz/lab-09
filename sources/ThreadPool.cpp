@@ -5,6 +5,15 @@
 #include <ThreadPool.hpp>
 
 
+#include <condition_variable>
+#include <functional>
+#include <future>
+#include <memory>
+#include <mutex>
+#include <queue>
+#include <thread>
+#include <vector>
+
 ThreadPool::ThreadPool(std::size_t workers_count) : _is_stopped(false) {
   for (std::size_t i = 0; i < workers_count; ++i) {
     _worker_threads.emplace_back([=] {
